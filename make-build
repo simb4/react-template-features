@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# !!! START BASH SCRIPT FROM ROOT OF FRONT !!! #
+# ALSO NOTICE, BACKEND FOLDER SHOULD BE CALLED 'ONEFIT' AND BE NEIGHBOUR FOLDER #
+
+function build () {
+	# RUN BUILD FROM FRONT ROOT
+
+	local build_type=$1
+	local target=$2
+	local npm_cmd=$3
+	local text=$4
+	local version='[FRONT: '"$build_type"'] '"$text"
+	echo '============================='
+	echo 'BUILD STARTED with params:'
+	echo 'type     : '"$build_type"
+	echo 'target   : '"$target"
+	echo 'npm cmd  : '"$npm_cmd"
+	echo 'message  : '"$text"
+	echo '============================='
+
+	npm run $npm_cmd
+
+
+	echo '============================='
+	echo 'BUILD COMPLETE, COPYING TO ANOTHER REPO...'
+	echo '============================='
+	# COPY BUILD TO TARGET
+	rm -rf $target
+	mkdir $target
+	cp -r build/* $target/
+	# copied!
+	echo '============================='
+	echo 'BUILD COPIED!'
+	echo '============================='
+
+
+	# ADD VERSION TO FRONT FILE
+	current_date_time=`date "+%Y-%m-%d %H:%M:%S"`;
+	echo '('"$current_date_time"') - '"$version" >> ./version
+
+	git add version
+	git commit -m "$version"
+
+
+	echo '============================='
+	echo 'COMMITING CHANGES TO BACKEND...'
+	echo '============================='
+
+	cd $target
+	git status
+	git add .
+
+	git commit -m '[FRONT: '"$build_type"'] '"$text"
+
+	# echo '============================='
+	# echo 'REBASE AND PUSH'
+	# echo '============================='
+	# git pull --rebase && git push origin master
+	# # pushed!
+	echo '============================='
+	echo '['"$text"'] MAKE-BUILD FINISHED'
+	echo '============================='
+}
+
+pos=$PWD
+
+if [[ $1 == '--prod' ]]; then
+	build 'DEVELOPMENT' ../onefit/front/build/dev build "$2"
+	cd $pos
+	build 'PRODUCTION' ../onefit/front/build/prod build-prod "$2"
+else
+	build 'DEVELOPMENT' ../onefit/front/build/dev build "$1"
+fi
+

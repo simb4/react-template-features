@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+build
+builds
+*.py[cod]
+src/*/*.css
+src/*/*/*.css
+src/*/*/*/*.css
+.eslintrc
+version
+.env
