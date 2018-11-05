@@ -31,8 +31,8 @@
     "extends": "react-app"
   },
   "scripts": {
-    "build-css": "less-watch-compiler --strict-math=on --run-once src src",
-    "watch-css": "npm run build-css && less-watch-compiler --strict-math=on src src/assets/styles index.less",
+    "build-css": "less-watch-compiler --strict-math=on --run-once src src assets/styles/index.less",
+    "watch-css": "npm run build-css && less-watch-compiler --strict-math=on src src assets/styles/index.less",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start-js": "REACT_APP_ENV=dev react-scripts start",
